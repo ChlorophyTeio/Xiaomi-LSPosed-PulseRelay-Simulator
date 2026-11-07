@@ -38,6 +38,8 @@ if r.status_code==404:
 else:
     r.raise_for_status();release=r.json()
     if not release['draft']: raise RuntimeError('Refusing to modify an already published release')
+    commit=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()
+    release=call('PATCH',base+'/releases/'+str(release['id']),json={'target_commitish':commit,'body':a.body.read_text(encoding='utf-8-sig')})
 assets={x['name']:x for x in release['assets']}
 files=parts+[sha,root/'scripts/Join-Release.ps1',root/'PORTABLE-README.md',root/'THIRD-PARTY.md']
 url=release['upload_url'].split('{')[0]
@@ -45,8 +47,9 @@ def upload(path):
     with path.open('rb') as f: local_digest='sha256:'+hashlib.file_digest(f,'sha256').hexdigest()
     if path.name in assets:
         item=assets[path.name]
-        if item.get('digest')!=local_digest or item['size']!=path.stat().st_size: raise RuntimeError('Existing release asset differs: '+path.name)
-        print('Verified existing '+path.name,flush=True);return
+        if item.get('digest')==local_digest and item['size']==path.stat().st_size:
+            print('Verified existing '+path.name,flush=True);return
+        call('DELETE',base+'/releases/assets/'+str(item['id']))
     for attempt in range(3):
         try:
             with path.open('rb') as f:

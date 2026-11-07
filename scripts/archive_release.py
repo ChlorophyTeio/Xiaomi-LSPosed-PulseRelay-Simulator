@@ -6,7 +6,7 @@ source=a.source.resolve();archive=a.archive.resolve()
 if archive.exists(): raise RuntimeError('Archive already exists')
 config=json.loads((source/'config.json').read_text(encoding='utf-8-sig'))
 if config['controller']!='UNCONFIGURED' or 'bluetoothInstanceId' in config: raise RuntimeError('Personal Bluetooth configuration remains')
-guest_files={'config.ini','cache.img','cache.img.qcow2','encryptionkey.img','encryptionkey.img.qcow2','userdata-qemu.img','userdata-qemu.img.qcow2'}
+guest_files={'config.ini','qemu-version.txt','version_num.cache','cache.img','cache.img.qcow2','encryptionkey.img','encryptionkey.img.qcow2','userdata-qemu.img','userdata-qemu.img.qcow2'}
 def include(path):
     rel=path.relative_to(source)
     if not path.is_file() or '__pycache__' in rel.parts or path.suffix=='.pyc': return False
