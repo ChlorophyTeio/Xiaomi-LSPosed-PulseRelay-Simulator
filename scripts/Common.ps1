@@ -32,9 +32,18 @@ function Wait-Android([int]$TimeoutSeconds = 240) {
     while ((Get-Date) -lt $deadline) {
         # Reconnect explicitly when a newly started ADB server has not discovered
         # an already running emulator (common after moving the portable folder).
-        & $Adb connect ("127.0.0.1:" + ($Config.adbPort + 1)) 2>$null | Out-Null
-        $boot = & $Adb -s $Serial shell getprop sys.boot_completed 2>$null
-        if ($LASTEXITCODE -eq 0 -and "$boot".Trim() -eq '1') { return }
+        # Windows PowerShell treats native stderr as terminating with 'Stop',
+        # even when redirected. Offline/not-found is expected during boot.
+        $savedPreference = $ErrorActionPreference
+        try {
+            $ErrorActionPreference = 'Continue'
+            & $Adb connect ("127.0.0.1:" + ($Config.adbPort + 1)) 2>$null | Out-Null
+            $boot = & $Adb -s $Serial shell getprop sys.boot_completed 2>$null
+            $bootExitCode = $LASTEXITCODE
+        } finally {
+            $ErrorActionPreference = $savedPreference
+        }
+        if ($bootExitCode -eq 0 -and "$boot".Trim() -eq '1') { return }
         Start-Sleep -Seconds 2
     }
     throw "Android did not boot within $TimeoutSeconds seconds. Check logs/emulator.*.log."

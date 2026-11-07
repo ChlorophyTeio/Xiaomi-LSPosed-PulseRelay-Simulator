@@ -12,18 +12,22 @@ from bumble.transport.usb import EventPacketSplitter
 
 
 async def run(controller: str, port: int) -> None:
+    logging.info('Opening Bluetooth adapter %s for initialization', controller)
     async with await transport.open_transport(controller) as reset_transport:
         reset_host = Host(reset_transport.source, reset_transport.sink)
         reset_driver = await intel.Driver.for_host(reset_host)
         if reset_driver:
+            logging.info('Rebooting Intel controller into bootloader')
             await reset_driver.reboot_bootloader()
     await asyncio.sleep(2)
+    logging.info('Opening Bluetooth adapter for HCI setup')
     async with await transport.open_transport(controller) as usb_transport:
         host = Host(usb_transport.source, usb_transport.sink)
         # AX211 loses its firmware when the Windows driver releases/restarts it.
         # The generic hci-bridge command does not initialize Intel firmware.
         driver = await intel.Driver.for_host(host)
         if driver:
+            logging.info('Loading Intel firmware (timeout: 45 seconds)')
             # Intel bootloader sends command-complete events on the bulk endpoint.
             # Bumble's USB ACL splitter otherwise buffers these as incomplete ACL.
             source = usb_transport.source
@@ -35,10 +39,15 @@ async def run(controller: str, port: int) -> None:
                 await asyncio.wait_for(driver.init_controller(), timeout=45)
             finally:
                 source.splitters[hci.HCI_ACL_DATA_PACKET] = original_splitter
+        logging.info('Resetting HCI controller (timeout: 30 seconds)')
         await asyncio.wait_for(host.reset(driver_factory=None), timeout=30)
-        address = await host.send_sync_command(hci.HCI_Read_BD_ADDR_Command())
+        logging.info('Reading Bluetooth address (timeout: 10 seconds)')
+        address = await asyncio.wait_for(
+            host.send_sync_command(hci.HCI_Read_BD_ADDR_Command()), timeout=10
+        )
         print(f"PHYSICAL_CONTROLLER {address.bd_addr}", flush=True)
         endpoint = f"android-netsim:127.0.0.1:{port},mode=controller"
+        logging.info('Starting emulator bridge at %s', endpoint)
         async with await transport.open_transport(endpoint) as android_transport:
             bridge = HCI_Bridge(
                 android_transport.source,
