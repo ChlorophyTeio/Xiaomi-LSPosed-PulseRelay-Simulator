@@ -1,8 +1,8 @@
 # PulseRelay Simulator
 
-在 Windows 11 x64 上运行支持 Root、LSPosed 和实体蓝牙桥接的安卓模拟器，用于国内版小米运动健康与小米手环 8 Pro。
+在 Windows 11 x64 上运行支持 Root、LSPosed 和实体蓝牙桥接的安卓模拟器，用于国内版小米运动健康与小米手环。
 
-链路：Windows USB 蓝牙 → Google Bumble HCI 桥接 → Android Emulator → 小米运动健康 → PulseRelay 模块 → UDP 接收端。
+链路：Windows 蓝牙 → Google Bumble HCI 桥接 → Android Emulator → 小米运动健康 → PulseRelay 模块 → UDP 接收端。
 
 ## 使用预装包
 
