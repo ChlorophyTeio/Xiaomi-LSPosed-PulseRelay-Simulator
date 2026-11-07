@@ -20,3 +20,5 @@ PulseRelay 的发布文件名为 310，但 APK 内部版本是 3.0.1（301），
 恢复 Windows 蓝牙：先停止模拟器，在设备管理器中对所选适配器“更新驱动程序 → 浏览我的电脑 → 让我选取”，选择原厂蓝牙驱动；原始驱动备份位于 `runtime/bluetooth-original`。按 Windows 提示重启。
 
 分发时请保留软件自带的 LICENSE、NOTICE 文件及 `THIRD-PARTY.md`。这是多项开源/免费工具的本机部署组合，后续公开再分发还应核对各组件许可范围，尤其 Google 系统镜像的 SDK/ARM 转译使用条款。
+
+恢复 Windows 蓝牙：双击 Restore-WindowsBluetooth.cmd 并允许管理员权限。Realtek RTL8922AE（13D3:3617）首次运行需联网下载并校验华硕专用驱动；其他适配器需有效的原厂驱动备份。恢复后如仍无法搜索，请确认外置天线、目标设备配对模式，并重启 Windows 后重试。不要重新运行 Configure-Bluetooth.cmd，除非要把适配器再次交给安卓独占。

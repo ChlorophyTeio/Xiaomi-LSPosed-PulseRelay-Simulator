@@ -56,3 +56,11 @@
 - [Bumble](https://google.github.io/bumble/platforms/android.html)
 - [LSPosed](https://github.com/LSPosed/LSPosed)
 - [rootAVD](https://gitlab.com/newbit/rootAVD)
+
+## Windows 蓝牙恢复与启动修复
+
+双击 `Restore-WindowsBluetooth.cmd`，允许管理员权限提示。脚本会停止本包的模拟器/蓝牙桥接，再恢复所选适配器的 Windows 驱动。
+
+对于 `USB\VID_13D3&PID_3617`（Realtek RTL8922AE），首次恢复会从华硕官网下载约 3 MB 的专用驱动，并验证官方 SHA256；不会仅凭通用驱动显示正常就判定无线扫描正常。其他适配器使用匹配的原厂驱动备份；备份缺失时会提示安装主板厂商驱动。切回 Windows 后，该适配器不能同时供安卓桥接使用。
+
+此修复还将桥接启动等待延长至 120 秒、增加启动阶段日志，并修复 Windows PowerShell 5.1 在安卓启动期间遇到 `device offline` 直接退出的问题。Realtek 专用驱动已在 ROG STRIX B850-G GAMING WIFI S 上成功安装，设备无错误；附近设备发现和实际配对仍需用户验证，不能据此宣称其他适配器兼容。
