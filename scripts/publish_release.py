@@ -31,12 +31,15 @@ def call(method,url,**kwargs):
     r=requests.request(method,url,headers=headers,timeout=(30,3600),**kwargs)
     if not r.ok: raise RuntimeError(f'GitHub {method} HTTP {r.status_code}: '+r.json().get('message','Request failed'))
     return r.json() if r.content else None
-r=requests.get(base+'/releases/tags/'+a.tag,headers=headers,timeout=30)
-if r.status_code==404:
+# Drafts may not resolve through the tag endpoint until their tag is published.
+# Find the newest matching draft explicitly so retries resume the same release.
+matching=[r for r in call('GET',base+'/releases') if r['tag_name']==a.tag]
+existing=max(matching,key=lambda r:r['id']) if matching else None
+if existing is None:
     commit=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()
     release=call('POST',base+'/releases',json={'tag_name':a.tag,'target_commitish':commit,'name':'Windows x64 Complete Portable '+a.tag,'body':a.body.read_text(encoding='utf-8-sig'),'draft':True})
 else:
-    r.raise_for_status();release=r.json()
+    release=existing
     if not release['draft']: raise RuntimeError('Refusing to modify an already published release')
     commit=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()
     release=call('PATCH',base+'/releases/'+str(release['id']),json={'target_commitish':commit,'body':a.body.read_text(encoding='utf-8-sig')})
