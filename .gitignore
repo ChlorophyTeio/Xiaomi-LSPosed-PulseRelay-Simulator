@@ -12,3 +12,10 @@ config.json
 *.pem
 *.keystore
 adbkey*
+
+# Online installer generated files and local settings
+installer/cache/
+installer/tools/
+installer/download-settings.json
+installer/PulseRelay/
+installer/*.installing-*/

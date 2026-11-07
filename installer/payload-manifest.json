@@ -1,0 +1,32 @@
+{
+  "runtimeVersion": "0.1.2",
+  "archiveRoot": "PulseRelay-Windows-Clean",
+  "archiveSize": 3929745169,
+  "archiveSha256": "4f83be02befd3bafb4f5e5b5c0d6b4f34204265be2186848f5661cd90f67af65",
+  "parts": [
+    {
+      "name": "PulseRelay-Windows-Clean.zip.part001",
+      "url": "https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases/download/v0.1.2/PulseRelay-Windows-Clean.zip.part001",
+      "size": 1073741824,
+      "sha256": "deaca9c0088fb0c212a8f30152a0187d58ef1867d0d5cb865986c399ed666d36"
+    },
+    {
+      "name": "PulseRelay-Windows-Clean.zip.part002",
+      "url": "https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases/download/v0.1.2/PulseRelay-Windows-Clean.zip.part002",
+      "size": 1073741824,
+      "sha256": "2ce52010b7590f0808a8bd20deeb9d88a519faf7a4360e11b7ae3003ab61540e"
+    },
+    {
+      "name": "PulseRelay-Windows-Clean.zip.part003",
+      "url": "https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases/download/v0.1.2/PulseRelay-Windows-Clean.zip.part003",
+      "size": 1073741824,
+      "sha256": "adb30f3df9d6d6a73bf432cabe464ad032f030aead672cc6a7e95652db612689"
+    },
+    {
+      "name": "PulseRelay-Windows-Clean.zip.part004",
+      "url": "https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases/download/v0.1.2/PulseRelay-Windows-Clean.zip.part004",
+      "size": 708519697,
+      "sha256": "a066dfea9fc2ab3835ab99038e3b483005b52a7c9067b091ba17521b54236ebf"
+    }
+  ]
+}

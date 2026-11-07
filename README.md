@@ -4,6 +4,14 @@
 
 链路：Windows 蓝牙 → Google Bumble HCI 桥接 → Android Emulator → 小米运动健康 → PulseRelay 模块 → UDP 接收端。
 
+## 轻量在线安装版
+
+从 Releases 下载 `PulseRelay-OnlineInstaller-v0.2.0.zip`，约 5.3 MiB，随包带 Zadig 与 AEHD。先运行 `Configure-Download-Proxy.cmd` 配置下载代理，再运行 `Install.cmd`。
+
+安装器首次下载约 3.66 GiB 的已验证 v0.1.2 运行环境，校验全部分卷与整包后安装到新目录，保留预装的 Root、LSPosed 和 PulseRelay 作用域。支持 HTTP/SOCKS5 代理、缓存续传；不会覆盖已有安卓数据。下载代理与安卓应用代理分别配置。详细说明见 [在线安装器说明](installer/README.md)。
+
+源码中的 `installer/` 不提交工具二进制。维护者使用 `scripts/build_online_installer.py --resources-source <现有预装目录> --output <新ZIP路径>` 生成轻量包；完整预装包仍可用于离线安装。
+
 ## 使用预装包
 
 从 [Releases](https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases) 下载同一版本的全部分卷、SHA256 文件和 `Join-Release.ps1`，放在同一文件夹，使用 PowerShell 运行合并脚本，再完整解压到 NTFS 磁盘。不要在压缩包内直接运行。
