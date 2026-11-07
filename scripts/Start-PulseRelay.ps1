@@ -33,12 +33,14 @@ if (!$WithoutBluetooth) {
     }
 }
 $emulatorArgs = @('-avd', $Config.avdName, '-port', $Config.adbPort, '-sysdir', ('"' + $ImageDir + '"'), '-no-snapshot', '-no-boot-anim', '-gpu', 'software', '-http-proxy', $Config.httpProxy)
+$emulatorArgs += @('-timezone', 'Asia/Shanghai')
 if (!$WithoutBluetooth) { $emulatorArgs += @('-packet-streamer-endpoint', "127.0.0.1:$($Config.bridgePort)") }
 if ($Headless) { $emulatorArgs += '-no-window' }
 try {
     $windowStyle = if ($Headless) { 'Hidden' } else { 'Normal' }
     $emulatorProcess = Start-Process -FilePath $Emulator -ArgumentList $emulatorArgs -WorkingDirectory $ProjectRoot -WindowStyle $windowStyle -PassThru -RedirectStandardOutput (Join-Path $ProjectRoot 'logs/emulator.stdout.log') -RedirectStandardError (Join-Path $ProjectRoot 'logs/emulator.stderr.log')
     Wait-Android
+    & "$PSScriptRoot/Set-AndroidDefaults.ps1"
     Invoke-Adb shell settings put global http_proxy '10.0.2.2:7897'
     Invoke-Adb shell settings put system screen_off_timeout 1800000
     Write-Output "Android ready: $Serial"

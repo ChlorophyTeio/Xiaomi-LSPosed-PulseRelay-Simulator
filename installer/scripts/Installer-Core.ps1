@@ -65,3 +65,8 @@ function Assert-RuntimeFiles([string]$Root) {
         if (!(Test-Path -LiteralPath (Join-Path $Root $name) -PathType Leaf)) { throw "Runtime is incomplete: $name" }
     }
 }
+function Install-RuntimePatches([string]$PackageRoot, [string]$Root) {
+    foreach ($name in @('Start-PulseRelay.ps1','Set-AndroidDefaults.ps1')) {
+        Copy-Item -LiteralPath (Join-Path $PackageRoot "runtime-patches/$name") -Destination (Join-Path $Root "scripts/$name") -Force
+    }
+}

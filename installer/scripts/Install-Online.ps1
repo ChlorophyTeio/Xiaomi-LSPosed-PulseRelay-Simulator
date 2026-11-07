@@ -37,6 +37,7 @@ try {
         $previous = Get-Content -LiteralPath $marker -Raw | ConvertFrom-Json
         if ($previous.payloadSha256 -eq $manifest.archiveSha256) {
             Assert-RuntimeFiles $target
+            Install-RuntimePatches $PackageRoot $target
             Write-Host "Already installed: $target"
             exit 0
         }
@@ -69,7 +70,8 @@ try {
     $staging = $target + '.installing-' + [guid]::NewGuid().ToString('N')
     Expand-PayloadArchive $archive $staging $manifest.archiveRoot
     Assert-RuntimeFiles $staging
-    $record = @{ installerVersion = '0.2.0'; runtimeVersion = $manifest.runtimeVersion; payloadSha256 = $manifest.archiveSha256 }
+    Install-RuntimePatches $PackageRoot $staging
+    $record = @{ installerVersion = '0.2.1'; runtimeVersion = $manifest.runtimeVersion; payloadSha256 = $manifest.archiveSha256 }
     $record | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $staging 'online-install.json') -Encoding ascii
     if (Test-Path -LiteralPath $target) { throw "InstallDirectory appeared during installation. Extracted files retained at $staging" }
     Move-Item -LiteralPath $staging -Destination $target
