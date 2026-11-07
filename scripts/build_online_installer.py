@@ -14,6 +14,9 @@ for name in ('Install.cmd','Configure-Download-Proxy.cmd','Run-Zadig.cmd','Insta
     else:shutil.copy2(src,dst)
 shutil.copy2(stage/'download-settings.example.json',stage/'download-settings.json')
 shutil.copy2(repo/'THIRD-PARTY.md',stage/'THIRD-PARTY.md')
+(stage/'runtime-patches').mkdir()
+for name in ('Start-PulseRelay.ps1','Set-AndroidDefaults.ps1'):
+    shutil.copy2(repo/'scripts'/name,stage/'runtime-patches'/name)
 (stage/'tools').mkdir()
 zadig=source/'downloads/zadig-2.9.exe'
 if hashlib.sha256(zadig.read_bytes()).hexdigest()!='4ecaa95df3da3621486a043aef8b3050b8bafe7c901402871e816229ef82039b':raise RuntimeError('Unexpected Zadig binary')
