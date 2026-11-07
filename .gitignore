@@ -1,0 +1,14 @@
+downloads/
+runtime/
+logs/
+apks/*.apk
+__pycache__/
+dist/
+config.json
+*.pyc
+*.idsig
+.venv/
+*.key
+*.pem
+*.keystore
+adbkey*

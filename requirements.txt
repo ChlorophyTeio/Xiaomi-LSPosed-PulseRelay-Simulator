@@ -1,0 +1,2 @@
+bumble[android]==0.0.236
+requests==2.34.2

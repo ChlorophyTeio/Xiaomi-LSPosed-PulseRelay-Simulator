@@ -1,0 +1,12 @@
+{
+  "sdk": "runtime/sdk",
+  "python": "runtime/python/python.exe",
+  "avdName": "PulseRelay12",
+  "apiLevel": 31,
+  "imageTag": "google_apis",
+  "adbPort": 5580,
+  "bridgePort": 8877,
+  "controller": "UNCONFIGURED",
+  "httpProxy": "http://127.0.0.1:7897",
+  "socksProxy": "socks5://127.0.0.1:7897"
+}
