@@ -55,8 +55,9 @@ def upload(path):
         call('DELETE',base+'/releases/assets/'+str(item['id']))
     for attempt in range(3):
         try:
+            print(f'Uploading {path.name}, attempt {attempt+1}',flush=True)
             with path.open('rb') as f:
-                r=requests.post(url,params={'name':path.name},headers={**headers,'Content-Type':'application/octet-stream'},data=f,timeout=(30,3600))
+                r=requests.post(url,params={'name':path.name},headers={**headers,'Content-Type':'application/octet-stream'},data=f,timeout=(30,180))
             if r.status_code!=201: raise RuntimeError(f'Asset {path.name}: HTTP {r.status_code}')
             item=r.json()
             if item['size']!=path.stat().st_size or item.get('digest')!=local_digest: raise RuntimeError('Uploaded asset verification failed: '+path.name)
@@ -68,6 +69,6 @@ def upload(path):
             if found: call('DELETE',base+'/releases/assets/'+str(found['id']))
             if attempt==2: raise
             time.sleep(3)
-with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool: list(pool.map(upload,files))
+for path in files: upload(path)
 release=call('PATCH',base+'/releases/'+str(release['id']),json={'draft':False,'make_latest':'true'})
 print('PUBLISHED '+release['html_url'],flush=True)
