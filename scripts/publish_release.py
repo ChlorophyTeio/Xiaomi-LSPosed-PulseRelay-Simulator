@@ -34,7 +34,7 @@ def call(method,url,**kwargs):
 r=requests.get(base+'/releases/tags/'+a.tag,headers=headers,timeout=30)
 if r.status_code==404:
     commit=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()
-    release=call('POST',base+'/releases',json={'tag_name':a.tag,'target_commitish':commit,'name':'Windows x64 ????? '+a.tag,'body':a.body.read_text(encoding='utf-8-sig'),'draft':True})
+    release=call('POST',base+'/releases',json={'tag_name':a.tag,'target_commitish':commit,'name':'Windows x64 Complete Portable '+a.tag,'body':a.body.read_text(encoding='utf-8-sig'),'draft':True})
 else:
     r.raise_for_status();release=r.json()
     if not release['draft']: raise RuntimeError('Refusing to modify an already published release')
