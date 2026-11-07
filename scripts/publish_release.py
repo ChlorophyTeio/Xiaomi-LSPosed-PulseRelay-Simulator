@@ -70,5 +70,5 @@ def upload(path):
             if attempt==2: raise
             time.sleep(3)
 for path in files: upload(path)
-release=call('PATCH',base+'/releases/'+str(release['id']),json={'draft':False,'make_latest':'true'})
+release=call('PATCH',base+'/releases/'+str(release['id']),json={'tag_name':a.tag,'draft':False,'make_latest':'true'})
 print('PUBLISHED '+release['html_url'],flush=True)
