@@ -6,6 +6,11 @@ $devices = & $Adb devices
 if ($devices -match "$Serial\s+device") { throw "$Serial is already running. Stop it first." }
 if (!$WithoutBluetooth) {
     if ($Config.controller -notmatch '^usb:[0-9a-fA-F]{4}:[0-9a-fA-F]{4}$') { throw 'Run Configure-Bluetooth.cmd first to select this computer''s Bluetooth adapter.' }
+    if ($Config.bluetoothInstanceId) {
+        $service = (Get-PnpDeviceProperty -InstanceId $Config.bluetoothInstanceId -KeyName DEVPKEY_Device_Service).Data
+        if ($service -ne 'WinUSB') { throw "Bluetooth adapter currently uses $service. Run Configure-Bluetooth.cmd and select WinUSB in Zadig before starting Android Bluetooth." }
+    }
+    if ($Config.controller -eq 'usb:13D3:3617') { & "$PSScriptRoot/Get-RealtekFirmware.ps1" }
     $bridgeArgs = @('-u', ('"' + (Join-Path $PSScriptRoot 'bluetooth_bridge.py') + '"'), '--controller', $Config.controller, '--port', $Config.bridgePort)
     $bridgeProcess = Start-Process -FilePath $BridgePython -ArgumentList $bridgeArgs -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $ProjectRoot 'logs/bridge.stdout.log') -RedirectStandardError (Join-Path $ProjectRoot 'logs/bridge.stderr.log')
     $bridgeProcess.Id | Set-Content (Join-Path $ProjectRoot 'runtime/bridge.pid')
