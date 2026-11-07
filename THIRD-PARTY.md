@@ -13,3 +13,6 @@
 - rootAVD：https://gitlab.com/newbit/rootAVD ，许可证保留在 downloads/rootAVD-LICENSE；干净系统的 Magisk ramdisk 由它生成。
 
 该压缩包用于用户在自己的 Windows 设备间迁移。公开再分发前应自行核对各专有组件及 Google SDK/ARM 转译许可允许的使用和分发范围。
+
+- Realtek RTL8922AU Bluetooth firmware: https://gitlab.com/kernel-firmware/linux-firmware/-/tree/main/rtl_bt ; SHA256 112290ca9dc3985034f572594812f0deb8530dd031686461b55cac43a1c35a79. Redistribution terms are retained as runtime/LICENCE.rtlwifi_firmware.txt. The initializer uses the vendor HCI protocol documented by Linux btrtl and Bumble; it loads volatile controller RAM only.
+- ASUS Realtek Windows Bluetooth driver cache: https://www.asus.com/tw/supportonly/rog%20strix%20b850-g%20gaming%20wifi%20s/helpdesk_download/ ; ZIP SHA256 C4346316B2F8EB7F2E13BDC70C05687E14315EF8FCE2435449CD817E5A93FAA2. Used only to restore Windows Bluetooth; not a replacement for the HCI bridge firmware.

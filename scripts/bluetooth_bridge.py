@@ -3,12 +3,18 @@ import argparse
 import asyncio
 import logging
 import os
+import sys
+from pathlib import Path
+
+# The portable embedded Python uses an isolated ._pth without the script directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from bumble import hci, transport
 from bumble.bridge import HCI_Bridge
 from bumble.drivers import intel
 from bumble.host import Host
 from bumble.transport.usb import EventPacketSplitter
+from realtek_8922 import initialize as initialize_realtek
 
 
 async def run(controller: str, port: int) -> None:
@@ -23,6 +29,8 @@ async def run(controller: str, port: int) -> None:
     logging.info('Opening Bluetooth adapter for HCI setup')
     async with await transport.open_transport(controller) as usb_transport:
         host = Host(usb_transport.source, usb_transport.sink)
+        if controller.lower() == 'usb:13d3:3617':
+            await asyncio.wait_for(initialize_realtek(host), timeout=60)
         # AX211 loses its firmware when the Windows driver releases/restarts it.
         # The generic hci-bridge command does not initialize Intel firmware.
         driver = await intel.Driver.for_host(host)

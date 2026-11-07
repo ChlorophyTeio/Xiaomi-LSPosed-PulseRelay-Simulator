@@ -6,7 +6,7 @@
 
 ## 使用预装包
 
-从 [Releases](https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases) 下载全部四个分卷、SHA256 文件和 `Join-Release.ps1`，放在同一文件夹，使用 PowerShell 运行合并脚本，再完整解压到 NTFS 磁盘。不要在压缩包内直接运行。
+从 [Releases](https://github.com/ChlorophyTeio/Xiaomi-LSPosed-PulseRelay-Simulator/releases) 下载同一版本的全部分卷、SHA256 文件和 `Join-Release.ps1`，放在同一文件夹，使用 PowerShell 运行合并脚本，再完整解压到 NTFS 磁盘。不要在压缩包内直接运行。
 
 1. 电脑需为 Intel/AMD x64，BIOS 已开启 CPU 虚拟化；Windows ARM 未验证。
 2. 运行 `First-Run-Drivers.cmd` 检查/安装加速驱动。使用 Hyper-V 的电脑应启用 Windows Hypervisor Platform，按提示重启。
@@ -64,3 +64,10 @@
 对于 `USB\VID_13D3&PID_3617`（Realtek RTL8922AE），首次恢复会从华硕官网下载约 3 MB 的专用驱动，并验证官方 SHA256；不会仅凭通用驱动显示正常就判定无线扫描正常。其他适配器使用匹配的原厂驱动备份；备份缺失时会提示安装主板厂商驱动。切回 Windows 后，该适配器不能同时供安卓桥接使用。
 
 此修复还将桥接启动等待延长至 120 秒、增加启动阶段日志，并修复 Windows PowerShell 5.1 在安卓启动期间遇到 `device offline` 直接退出的问题。Realtek 专用驱动已在 ROG STRIX B850-G GAMING WIFI S 上成功安装，设备无错误；附近设备发现和实际配对仍需用户验证，不能据此宣称其他适配器兼容。
+
+
+## v0.1.2 Realtek 固件修复与完整包
+
+启动桥接时为 Realtek RTL8922AE（13D3:3617）加载并校验易失性补丁固件。此前仅开启 HCI/蓝牙状态不足以让无线扫描工作；本版已验证宿主机扫描及安卓配对页面发现附近 BLE 设备。具体小米手环的发现、登录、绑定与心率发送仍需用户验证。退出时等待 QEMU 完全关闭后再停止桥接，避免提前断开传输。
+
+完整包从全新安卓数据盘重新预装，包含 Realtek 固件和 Windows 恢复驱动缓存；无账号、配对记录和 ADB 主机私钥。源码克隆首次启动会自动下载并校验 Realtek 固件。
